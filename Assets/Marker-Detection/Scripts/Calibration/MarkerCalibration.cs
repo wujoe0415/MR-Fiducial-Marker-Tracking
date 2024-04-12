@@ -5,13 +5,13 @@ using UnityEngine.UI;
 using TMPro;
 
 [RequireComponent(typeof(CalculateTransformRT))]
-public class TagCalibration : MonoBehaviour
+public class MarkerCalibration : MonoBehaviour
 {
     [Range(500, 3000)]
     public int SamplePointNumber = 1000;
     private KeyCode _keyBoardCalibration = KeyCode.K;
 
-    public TagTrackProvider TrackProvider;
+    public MarkerTrackProvider TrackProvider;
     public Transform TagCamera;
     public Transform VRCalibrationPoint;
     public Transform VRCamera;

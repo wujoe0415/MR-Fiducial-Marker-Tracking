@@ -11,7 +11,7 @@ public enum ArucoTagType
     //Aruco7x7
 }
 
-public class TagTrackProvider : MonoBehaviour
+public class MarkerTrackProvider : MonoBehaviour
 {
     [HideInInspector]
     public bool IsTracked = false;

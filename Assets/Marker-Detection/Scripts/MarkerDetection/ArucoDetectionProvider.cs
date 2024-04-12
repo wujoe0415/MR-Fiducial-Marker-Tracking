@@ -3,27 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(TagPredictionReciver))]
+[RequireComponent(typeof(MarkerPredictionReciver))]
 public class ArucoDetectionProvider : MonoBehaviour, IDetectionProvider
 {
     private Transform _calibRT;
-    private List<TagTrackProvider> _arucoTagTrackProviders = new List<TagTrackProvider>();
+    private List<MarkerTrackProvider> _arucoTagTrackProviders = new List<MarkerTrackProvider>();
 
     private int _tagTypeNum = 2;
-    private List<Dictionary<int, TagTrackProvider>> _trackers = new List<Dictionary<int, TagTrackProvider>>(); // 0 for 6*6, 1 for 4*4
+    private List<Dictionary<int, MarkerTrackProvider>> _trackers = new List<Dictionary<int, MarkerTrackProvider>>(); // 0 for 6*6, 1 for 4*4
     
     private IEnumerator _coroutine;
 
     public bool ShowWireTag = false;
     public bool ShowViewFrustrum = false;
-    private TagDrawer _drawer;
+    private MarkerDrawer _drawer;
     private SerializeFrustrum _frustrum;
 
     [HideInInspector]
     public double[] TagInfo = null;
     private int[] _currentFrameTracked;
 
-    public void AddTracker(TagTrackProvider tracker)
+    public void AddTracker(MarkerTrackProvider tracker)
     {
         if (tracker.TagType == ArucoTagType.Aruco4x4)
         {
@@ -45,7 +45,7 @@ public class ArucoDetectionProvider : MonoBehaviour, IDetectionProvider
         }
         _arucoTagTrackProviders.Add(tracker);
     }
-    public void RemoveTracker(TagTrackProvider tracker)
+    public void RemoveTracker(MarkerTrackProvider tracker)
     {
         if (tracker.TagType == ArucoTagType.Aruco4x4)
         {
@@ -71,7 +71,7 @@ public class ArucoDetectionProvider : MonoBehaviour, IDetectionProvider
     private void Awake()
     {
         for (int i = 0; i < _tagTypeNum; i++)
-            _trackers.Add(new Dictionary<int, TagTrackProvider>());
+            _trackers.Add(new Dictionary<int, MarkerTrackProvider>());
 
         GameObject calib = new GameObject("RT");
         if (GameObject.Find("OVRCameraRig") == null)
@@ -95,13 +95,13 @@ public class ArucoDetectionProvider : MonoBehaviour, IDetectionProvider
         Shader tmp = Shader.Find("Unlit/Color");
         Material tagMaterial = new Material(tmp);
         tagMaterial.SetColor("_Color", new Color(1f, 195f / 255, 0f));
-        _drawer = new TagDrawer(tagMaterial);
+        _drawer = new MarkerDrawer(tagMaterial);
         
-        var _aprilTagTrackInScene = FindObjectsOfType<TagTrackProvider>();
+        var _aprilTagTrackInScene = FindObjectsOfType<MarkerTrackProvider>();
 
-        foreach (TagTrackProvider track in _aprilTagTrackInScene)
+        foreach (MarkerTrackProvider track in _aprilTagTrackInScene)
             AddTracker(track);
-        GetComponent<TagPredictionReciver>().AddTagRecieve(UpdateTagInfo);
+        GetComponent<MarkerPredictionReciver>().AddTagRecieve(UpdateTagInfo);
     }
     private void OnEnable()
     {
@@ -121,7 +121,7 @@ public class ArucoDetectionProvider : MonoBehaviour, IDetectionProvider
     }
     private void UpdateTag(int prefabNum, ArraySegment<double> tagSig)
     {
-        var tagWrapper = TagWrapper.Create(tagSig);
+        var tagWrapper = MarkerWrapper.Create(tagSig);
         int tagType = (int)tagWrapper.MarkerType;
 
         if (tagType >= _tagTypeNum || !_trackers[tagType].ContainsKey((int)tagWrapper.MarkerId))

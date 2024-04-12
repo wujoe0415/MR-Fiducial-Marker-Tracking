@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(TagPredictionReciver))]
+[RequireComponent(typeof(MarkerPredictionReciver))]
 public class SampleTagManager : MonoBehaviour
 {
     private Transform _calibRT;
-    private TagVisualizer _visualizer;
+    private MarkerVisualizer _visualizer;
 
     private void Start()
     {
@@ -23,9 +23,9 @@ public class SampleTagManager : MonoBehaviour
         calib.transform.parent = GameObject.Find("CenterEyeAnchor").transform;
         calib.AddComponent<ApplyCalibration>();
         _calibRT = calib.transform;
-        _visualizer = TagVisualizer.Create(_calibRT);
+        _visualizer = MarkerVisualizer.Create(_calibRT);
 
-        GetComponent<TagPredictionReciver>().AddTagRecieve(UpdateTags);
+        GetComponent<MarkerPredictionReciver>().AddTagRecieve(UpdateTags);
     }
 
     public void UpdateTags(double[] markers)

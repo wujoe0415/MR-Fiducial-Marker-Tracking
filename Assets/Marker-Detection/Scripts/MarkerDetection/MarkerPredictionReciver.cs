@@ -8,7 +8,7 @@ using System.Threading;
 using UnityEngine;
 
 [RequireComponent(typeof(AnacondaStarter))]
-public class TagPredictionReciver : MonoBehaviour
+public class MarkerPredictionReciver : MonoBehaviour
 {
     private Action<double[]> _onTagRecieve;
     private Action _onCloseServer;

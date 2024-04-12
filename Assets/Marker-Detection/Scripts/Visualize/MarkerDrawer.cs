@@ -1,11 +1,11 @@
 using UnityEngine;
 
-sealed class TagDrawer : System.IDisposable
+sealed class MarkerDrawer : System.IDisposable
 {
     Mesh _mesh;
     Material _sharedMaterial;
 
-    public TagDrawer(Material material)
+    public MarkerDrawer(Material material)
     {
         _mesh = BuildMesh();
         _sharedMaterial = material;

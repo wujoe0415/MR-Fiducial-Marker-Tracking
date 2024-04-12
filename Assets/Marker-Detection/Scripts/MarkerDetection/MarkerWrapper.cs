@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TagWrapper
+public class MarkerWrapper
 {
-    public static TagWrapper Create(ArraySegment<double> markerSeg)
+    public static MarkerWrapper Create(ArraySegment<double> markerSeg)
     {
-        return new TagWrapper(markerSeg);
+        return new MarkerWrapper(markerSeg);
     }
 
     private double _markerType;
@@ -82,7 +82,7 @@ public class TagWrapper
         }
     }
 
-    private TagWrapper(ArraySegment<double> markerSeg)
+    private MarkerWrapper(ArraySegment<double> markerSeg)
     {
         var marker = markerSeg.Array;
 

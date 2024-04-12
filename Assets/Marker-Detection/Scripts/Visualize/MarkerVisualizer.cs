@@ -3,20 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TagVisualizer
+public class MarkerVisualizer
 {
     private Transform _tagRootRT;
     private List<GameObject> _tagPrefabs;
 
-    private TagVisualizer(Transform rt)
+    private MarkerVisualizer(Transform rt)
     {
         _tagRootRT = rt;
         _tagPrefabs = new List<GameObject>();
     }
 
-    public static TagVisualizer Create(Transform rt)
+    public static MarkerVisualizer Create(Transform rt)
     {
-        return new TagVisualizer(rt);
+        return new MarkerVisualizer(rt);
     }
 
     private void ResetUnusedPrefab(int startIndex)
@@ -54,7 +54,7 @@ public class TagVisualizer
 
     private void UpdateTag(int prefabNum, ArraySegment<double> markerSeg)
     {
-        var tagWrapper = TagWrapper.Create(markerSeg);
+        var tagWrapper = MarkerWrapper.Create(markerSeg);
         
         while (_tagPrefabs.Count <= prefabNum)
         {

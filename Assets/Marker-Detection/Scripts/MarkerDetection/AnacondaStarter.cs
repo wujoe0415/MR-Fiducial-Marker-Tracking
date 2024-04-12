@@ -31,7 +31,7 @@ public class AnacondaStarter : MonoBehaviour
             return;
         }
         StartAnaconda();
-        GetComponent<TagPredictionReciver>().AddCloseServer(CloseProcess);
+        GetComponent<MarkerPredictionReciver>().AddCloseServer(CloseProcess);
     }
     public void StartAnaconda()
     {

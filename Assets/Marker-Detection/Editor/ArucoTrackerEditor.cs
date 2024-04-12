@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(TagTrackProvider))]
+[CustomEditor(typeof(MarkerTrackProvider))]
 public class ArucoTrackerEditor : Editor
 {
     private Texture2D previewTexture;
@@ -9,7 +9,7 @@ public class ArucoTrackerEditor : Editor
     private void OnEnable()
     {
         // Load your sprite as a Texture2D for preview
-        TagTrackProvider arcuo = (TagTrackProvider)target;
+        MarkerTrackProvider arcuo = (MarkerTrackProvider)target;
         previewTexture = AssetPreview.GetAssetPreview(arcuo.PreviewSprite);
     }
 
@@ -28,7 +28,7 @@ public class ArucoTrackerEditor : Editor
     }
     private void UpdatePreviewTexture()
     {
-        TagTrackProvider aruco = (TagTrackProvider)target;
+        MarkerTrackProvider aruco = (MarkerTrackProvider)target;
         
         string texturePath = "Assets/Marker-Detection/Markers/" + aruco.TagType.ToString() + "/aruco_markers_" + aruco.TagID + ".png";
         Texture2D loadedTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);
