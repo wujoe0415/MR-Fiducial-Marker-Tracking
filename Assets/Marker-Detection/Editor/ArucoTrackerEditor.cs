@@ -30,7 +30,7 @@ public class ArucoTrackerEditor : Editor
     {
         TagTrackProvider aruco = (TagTrackProvider)target;
         
-        string texturePath = "Assets/ArUco/Tags/" + aruco.TagType.ToString() + "/aruco_markers_" + aruco.TagID + ".png";
+        string texturePath = "Assets/Marker-Detection/Markers/" + aruco.TagType.ToString() + "/aruco_markers_" + aruco.TagID + ".png";
         Texture2D loadedTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);
         if (loadedTexture != null) { 
             previewTexture  = AssetPreview.GetAssetPreview(loadedTexture);
