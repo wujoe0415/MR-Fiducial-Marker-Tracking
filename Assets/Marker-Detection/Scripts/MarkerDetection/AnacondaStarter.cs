@@ -18,12 +18,33 @@ public class AnacondaStarter : MonoBehaviour
 
     private void Awake()
     {
-        _arucoDetecterPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\aruco_detection";
+        //#region Desktop
+        //_arucoDetecterPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\aruco_detection";
+        //if (!Directory.Exists(_arucoDetecterPath))
+        //{
+        //    UnityEngine.Debug.LogError(_arucoDetecterPath + " directory not found!");
+        //    return;
+        //}
+        //#endregion
+        #region PersistentData
+        _arucoDetecterPath = Application.persistentDataPath + "\\aruco_detection";
         if (!Directory.Exists(_arucoDetecterPath))
         {
-            UnityEngine.Debug.LogError(_arucoDetecterPath + " directory not found!");
-            return;
+            string[] files = Directory.GetFiles(_arucoDetecterPath);
+            string destinationFolderPath = Application.persistentDataPath + "/aruco_detection/";
+
+            if (!Directory.Exists(destinationFolderPath))
+                Directory.CreateDirectory(destinationFolderPath);
+
+            foreach (string file in files)
+            {
+                string fileName = Path.GetFileName(file);
+                string destinationFilePath = Path.Combine(destinationFolderPath, fileName);
+                File.Copy(file, destinationFilePath, true); // Set the last parameter to true to overwrite existing files
+            }
+            UnityEngine.Debug.Log("Files copied successfully.");
         }
+        #endregion
         _anacondaPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\anaconda3\\Scripts\\activate.bat";
         if (!File.Exists(_anacondaPath))
         {
