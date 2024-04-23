@@ -34,7 +34,7 @@ public class MarkerTrackProvider : MonoBehaviour
         else
             OnLoseTrack.Invoke();
     }
-    public ArucoTagType TagType = ArucoTagType.Aruco4x4;
+    public ArucoTagType MarkerType = ArucoTagType.Aruco4x4;
     [HideInInspector]
     public Texture2D PreviewSprite;
     [Header("Aruco Tag Transform")]
@@ -43,7 +43,7 @@ public class MarkerTrackProvider : MonoBehaviour
     private float _tagSize = 0f;
 
     [Range(0, 20)]
-    public int TagID = 0;
+    public int MarkerID = 0;
     public void OnDrawGizmos()
     {
         var rotationMatrix = Matrix4x4.TRS(transform.position + transform.rotation * OffsetPosition, transform.rotation * Quaternion.Euler(OffsetRotation), new Vector3(1, 1, 1));
@@ -57,7 +57,7 @@ public class MarkerTrackProvider : MonoBehaviour
 #endif
         Gizmos.matrix = rotationMatrix;
         _tagSize = 0.069f;
-        if (TagType == ArucoTagType.Aruco4x4)
+        if (MarkerType == ArucoTagType.Aruco4x4)
             _tagSize /= 2;
 #if UNITY_EDITOR
         Gizmos.DrawWireCube(Vector3.zero, new Vector3(_tagSize, _tagSize, 0f));

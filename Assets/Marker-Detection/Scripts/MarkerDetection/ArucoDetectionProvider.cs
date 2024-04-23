@@ -25,45 +25,45 @@ public class ArucoDetectionProvider : MonoBehaviour, IDetectionProvider
 
     public void AddTracker(MarkerTrackProvider tracker)
     {
-        if (tracker.TagType == ArucoTagType.Aruco4x4)
+        if (tracker.MarkerType == ArucoTagType.Aruco4x4)
         {
-            if (_trackers[1].ContainsKey(tracker.TagID))
+            if (_trackers[1].ContainsKey(tracker.MarkerID))
             {
                 Debug.LogWarning("Key has bee added!");
                 return;
             }
-            _trackers[1].Add(tracker.TagID, tracker);
+            _trackers[1].Add(tracker.MarkerID, tracker);
         }
         else
         {
-            if (_trackers[0].ContainsKey(tracker.TagID))
+            if (_trackers[0].ContainsKey(tracker.MarkerID))
             {
                 Debug.LogWarning("Key has bee added!");
                 return;
             }
-            _trackers[0].Add(tracker.TagID, tracker);
+            _trackers[0].Add(tracker.MarkerID, tracker);
         }
         _arucoTagTrackProviders.Add(tracker);
     }
     public void RemoveTracker(MarkerTrackProvider tracker)
     {
-        if (tracker.TagType == ArucoTagType.Aruco4x4)
+        if (tracker.MarkerType == ArucoTagType.Aruco4x4)
         {
-            if (_trackers[1].ContainsKey(tracker.TagID))
+            if (_trackers[1].ContainsKey(tracker.MarkerID))
             {
                 Debug.LogWarning("Key cannot be found!");
                 return;
             }
-            _trackers[1].Remove(tracker.TagID);
+            _trackers[1].Remove(tracker.MarkerID);
         }
         else
         {
-            if (_trackers[0].ContainsKey(tracker.TagID))
+            if (_trackers[0].ContainsKey(tracker.MarkerID))
             {
                 Debug.LogWarning("Key cannot be found!");
                 return;
             }
-            _trackers[0].Remove(tracker.TagID);
+            _trackers[0].Remove(tracker.MarkerID);
         }
         _arucoTagTrackProviders.Remove(tracker);
     }

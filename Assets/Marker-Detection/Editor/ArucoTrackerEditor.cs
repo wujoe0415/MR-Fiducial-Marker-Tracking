@@ -30,14 +30,14 @@ public class ArucoTrackerEditor : Editor
     {
         MarkerTrackProvider aruco = (MarkerTrackProvider)target;
         
-        string texturePath = "Assets/Marker-Detection/Markers/" + aruco.TagType.ToString() + "/aruco_markers_" + aruco.TagID + ".png";
+        string texturePath = "Assets/Marker-Detection/Markers/" + aruco.MarkerType.ToString() + "/aruco_markers_" + aruco.MarkerID + ".png";
         Texture2D loadedTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);
         if (loadedTexture != null) { 
             previewTexture  = AssetPreview.GetAssetPreview(loadedTexture);
         }
         else
         {
-            Debug.Log("Texture not found for TagID: " + aruco.TagID);
+            Debug.Log("Texture not found for TagID: " + aruco.MarkerID);
             previewTexture = null;
         }
     }
