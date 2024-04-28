@@ -53,7 +53,8 @@ public class AnacondaStarter : MonoBehaviour
             UnityEngine.Debug.Log("Files copied successfully.");
         }
         #endregion
-        _anacondaPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\anaconda3\\Scripts\\activate.bat"; // Default path
+        if(_anacondaPath == "")
+            _anacondaPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\anaconda3\\Scripts\\activate.bat"; // Default path
         if (!File.Exists(_anacondaPath))
         {
             UnityEngine.Debug.LogError(_anacondaPath + " file not found!");
