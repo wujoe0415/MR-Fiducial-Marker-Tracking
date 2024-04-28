@@ -4,34 +4,28 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Collections.Concurrent;
+using UnityEngine.Networking.Types;
 
 public class AnacondaStarter : MonoBehaviour
 {
     private Process _pythonProcess;
     [Tooltip("Register the target environment name in Anaconda")]
-    public string AnacondaEnvironment = "IDVR23";
+    private string AnacondaEnvironment = "aruco_detection";
     private string _arucoDetecterPath = "";
-    private string _anacondaPath = "";
+    private string _anacondaPath = ""; // Default path is "C:\Users\<user>\anaconda3\Scripts\activate.bat"
 
     private ConcurrentQueue<string> _terminateAnacondaSignal =
         new ConcurrentQueue<string>();
 
     private void Awake()
     {
-        //#region Desktop
-        //_arucoDetecterPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\aruco_detection";
-        //if (!Directory.Exists(_arucoDetecterPath))
-        //{
-        //    UnityEngine.Debug.LogError(_arucoDetecterPath + " directory not found!");
-        //    return;
-        //}
-        //#endregion
         #region PersistentData
         _arucoDetecterPath = Application.persistentDataPath + "\\aruco_detection";
         if (!Directory.Exists(_arucoDetecterPath))
         {
-            string[] files = Directory.GetFiles(_arucoDetecterPath);
-            string destinationFolderPath = Application.persistentDataPath + "/aruco_detection/";
+            string[] files = Directory.GetFiles(Application.dataPath + "\\Resources\\aruco_detection");
+            string[] subDirs = Directory.GetDirectories(Application.dataPath + "\\Resources\\aruco_detection");
+            string destinationFolderPath = Application.persistentDataPath + "\\aruco_detection";
 
             if (!Directory.Exists(destinationFolderPath))
                 Directory.CreateDirectory(destinationFolderPath);
@@ -42,10 +36,24 @@ public class AnacondaStarter : MonoBehaviour
                 string destinationFilePath = Path.Combine(destinationFolderPath, fileName);
                 File.Copy(file, destinationFilePath, true); // Set the last parameter to true to overwrite existing files
             }
+            foreach (string subDir in subDirs)
+            {
+                string destSubDir = destinationFolderPath + "\\" + new DirectoryInfo(subDir).Name;
+                if (!Directory.Exists(destSubDir))
+                    Directory.CreateDirectory(destSubDir);
+
+                string[] subFiles = Directory.GetFiles(subDir);
+                foreach (string file in subFiles)
+                {
+                    string fileName = Path.GetFileName(file);
+                    string destinationFilePath = Path.Combine(destSubDir, fileName);
+                    File.Copy(file, destinationFilePath, true); // Set the last parameter to true to overwrite existing files
+                }
+            }
             UnityEngine.Debug.Log("Files copied successfully.");
         }
         #endregion
-        _anacondaPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\anaconda3\\Scripts\\activate.bat";
+        _anacondaPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\anaconda3\\Scripts\\activate.bat"; // Default path
         if (!File.Exists(_anacondaPath))
         {
             UnityEngine.Debug.LogError(_anacondaPath + " file not found!");
@@ -83,10 +91,10 @@ public class AnacondaStarter : MonoBehaviour
         Process _pythonProcess = new Process { StartInfo = startInfo };
 
 
-            _pythonProcess.Exited += (sender, e) =>
-            {
-                UnityEngine.Debug.Log("CMD process exited");
-            };
+        _pythonProcess.Exited += (sender, e) =>
+        {
+            UnityEngine.Debug.Log("CMD process exited");
+        };
 
         // Event handler for process error output
         _pythonProcess.ErrorDataReceived += (sender, e) =>

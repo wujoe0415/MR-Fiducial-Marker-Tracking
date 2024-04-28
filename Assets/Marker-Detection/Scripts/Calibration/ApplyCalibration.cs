@@ -20,7 +20,7 @@ public class ApplyCalibration : MonoBehaviour
     }
     private DenseMatrix LoadMatrix()
     {
-        string filePath = "Assets/ArUco/matrix.json";
+        string filePath = "Assets/Marker-Detection/matrix.json";
         if (File.Exists(filePath))
         {
             string json = File.ReadAllText(filePath);

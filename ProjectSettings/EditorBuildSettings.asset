@@ -4,7 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Marker-Detection/Sample/SimpleDemo/Aruco_SimpleDemo.unity
+    guid: 96479f76e4b96c14b841cada5df93cd4
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: cd28d0305612ce046a6030a88ec58e39, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 05af7923db0db1644a9927f539c7fb3c, type: 2}

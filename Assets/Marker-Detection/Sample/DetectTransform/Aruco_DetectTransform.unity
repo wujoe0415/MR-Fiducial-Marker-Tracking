@@ -228,7 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 891c0be7fa732e74ea9f2c44111a36ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AnacondaEnvironment: IDVR23
+  AnacondaEnvironment: aruco_detection
 --- !u!1 &293669016
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,11 +703,11 @@ MonoBehaviour:
   OnLoseTrack:
     m_PersistentCalls:
       m_Calls: []
-  TagType: 1
+  MarkerType: 0
   PreviewSprite: {fileID: 0}
   OffsetPosition: {x: 0, y: 0, z: 0.005}
   OffsetRotation: {x: 0, y: 0, z: 0}
-  TagID: 0
+  MarkerID: 0
 --- !u!1 &1180756243
 GameObject:
   m_ObjectHideFlags: 0
@@ -906,8 +906,8 @@ MonoBehaviour:
   OnLoseTrack:
     m_PersistentCalls:
       m_Calls: []
-  TagType: 0
+  MarkerType: 0
   PreviewSprite: {fileID: 0}
   OffsetPosition: {x: 0, y: 0, z: 0.09}
   OffsetRotation: {x: 0, y: 0, z: 0}
-  TagID: 1
+  MarkerID: 0
