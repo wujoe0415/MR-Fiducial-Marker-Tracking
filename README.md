@@ -54,5 +54,20 @@ You are willing to customize the system. We provide the most basic code to imple
 
 + [`SampleTagManager.cs`](https://github.com/wujoe0415/MR-Fiducial-Marker-Tracking/blob/main/Assets/Marker-Detection/Sample/SimpleDemo/Scripts/SampleTagManager.cs) shows the logic basis of the ArUco tracking system. You may refer to it and develop your system. 
 
+## Troubleshooting
+
++ `Anaconda activate.bat, the $path$ file was not found!`
+
+  Please check your Anaconda `activate.bat`(`$path$\anaconda3\Scripts\activate.bat`) file path and refer it to  `_anacondaPath` variable in `AnacondaStarter.cs`.
+
++ `Fail to find aruco_detection dictionary!`
+
+  Please check whether there is a folder in path  `$Application.persistentDataPath$\aruco_detection`.
+
++ Fail to find anaconda environment name.
+  
+  The default Anaconda environment is `aruco_detection`; if you rename it, you must refer to the variable in `AnacondaStarter.cs`.
+  
+
 ## Contribution
 

@@ -57,7 +57,7 @@ public class AnacondaStarter : MonoBehaviour
             _anacondaPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\anaconda3\\Scripts\\activate.bat"; // Default path
         if (!File.Exists(_anacondaPath))
         {
-            UnityEngine.Debug.LogError(_anacondaPath + " file not found!");
+            UnityEngine.Debug.LogError("Anaconda activate.bat, the " + _anacondaPath + " file was not found!");
             return;
         }
         StartAnaconda();
@@ -68,7 +68,7 @@ public class AnacondaStarter : MonoBehaviour
         if (_arucoDetecterPath == null)
         {
 #if UNITY_EDITOR
-            UnityEngine.Debug.LogError("Fail to find Anaconda path");
+            UnityEngine.Debug.LogError("Fail to find aruco_detection dictionary!");
             UnityEditor.EditorApplication.isPlaying = false;
 #else
             Application.Quit();
