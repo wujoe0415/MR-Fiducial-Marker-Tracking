@@ -56,15 +56,15 @@ You are willing to customize the system. We provide the most basic code to imple
 
 ## Troubleshooting
 
-+ `Anaconda activate.bat, the $path$ file was not found!`
++ Unity Warning Message: `Anaconda activate.bat, the $path$ file was not found!`
 
   Please check your Anaconda `activate.bat`(`$path$\anaconda3\Scripts\activate.bat`) file path and refer it to  `_anacondaPath` variable in `AnacondaStarter.cs`.
 
-+ `Fail to find aruco_detection dictionary!`
++ Unity Warning Message: `Fail to find aruco_detection dictionary!`
 
   Please check whether there is a folder in path  `$Application.persistentDataPath$\aruco_detection`.
 
-+ Fail to find anaconda environment name.
++ Unity Warning Message: Fail to find the name of the anaconda environment.
   
   The default Anaconda environment is `aruco_detection`; if you rename it, you must refer to the variable in `AnacondaStarter.cs`.
   

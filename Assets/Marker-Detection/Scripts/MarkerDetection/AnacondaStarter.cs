@@ -21,39 +21,45 @@ public class AnacondaStarter : MonoBehaviour
     {
         #region PersistentData
         _arucoDetecterPath = Application.persistentDataPath + "\\aruco_detection";
-        if (!Directory.Exists(_arucoDetecterPath))
+#if UNITY_EDITOR
+        if(Directory.Exists(_arucoDetecterPath))
+            Directory.Delete(_arucoDetecterPath, true);
+        
+        string[] files = Directory.GetFiles(Application.dataPath + "\\Resources\\aruco_detection");
+        string[] subDirs = Directory.GetDirectories(Application.dataPath + "\\Resources\\aruco_detection");
+        string destinationFolderPath = Application.persistentDataPath + "\\aruco_detection";
+
+        if (!Directory.Exists(destinationFolderPath))
+            Directory.CreateDirectory(destinationFolderPath);
+
+        foreach (string file in files)
         {
-            string[] files = Directory.GetFiles(Application.dataPath + "\\Resources\\aruco_detection");
-            string[] subDirs = Directory.GetDirectories(Application.dataPath + "\\Resources\\aruco_detection");
-            string destinationFolderPath = Application.persistentDataPath + "\\aruco_detection";
+            string fileName = Path.GetFileName(file);
+            string destinationFilePath = Path.Combine(destinationFolderPath, fileName);
+            File.Copy(file, destinationFilePath, true); // Set the last parameter to true to overwrite existing files
+        }
+        foreach (string subDir in subDirs)
+        {
+            string destSubDir = destinationFolderPath + "\\" + new DirectoryInfo(subDir).Name;
+            if (!Directory.Exists(destSubDir))
+                Directory.CreateDirectory(destSubDir);
 
-            if (!Directory.Exists(destinationFolderPath))
-                Directory.CreateDirectory(destinationFolderPath);
-
-            foreach (string file in files)
+            string[] subFiles = Directory.GetFiles(subDir);
+            foreach (string file in subFiles)
             {
                 string fileName = Path.GetFileName(file);
-                string destinationFilePath = Path.Combine(destinationFolderPath, fileName);
+                string destinationFilePath = Path.Combine(destSubDir, fileName);
                 File.Copy(file, destinationFilePath, true); // Set the last parameter to true to overwrite existing files
             }
-            foreach (string subDir in subDirs)
-            {
-                string destSubDir = destinationFolderPath + "\\" + new DirectoryInfo(subDir).Name;
-                if (!Directory.Exists(destSubDir))
-                    Directory.CreateDirectory(destSubDir);
-
-                string[] subFiles = Directory.GetFiles(subDir);
-                foreach (string file in subFiles)
-                {
-                    string fileName = Path.GetFileName(file);
-                    string destinationFilePath = Path.Combine(destSubDir, fileName);
-                    File.Copy(file, destinationFilePath, true); // Set the last parameter to true to overwrite existing files
-                }
-            }
-            UnityEngine.Debug.Log("Files copied successfully.");
         }
+        UnityEngine.Debug.Log("Files copied successfully.");
+        
+#else
+            Application.Quit();
+#endif
+
         #endregion
-        if(_anacondaPath == "")
+        if (_anacondaPath == "")
             _anacondaPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\anaconda3\\Scripts\\activate.bat"; // Default path
         if (!File.Exists(_anacondaPath))
         {
