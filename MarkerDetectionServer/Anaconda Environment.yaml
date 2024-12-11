@@ -15,4 +15,4 @@ dependencies:
   - pip:
       - numpy==1.24.4
       - opencv-contrib-python==4.8.1.78
-      - filterp==1.4.5
+      - filterpy==1.4.5
