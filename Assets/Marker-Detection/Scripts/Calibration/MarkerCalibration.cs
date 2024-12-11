@@ -12,7 +12,7 @@ public class MarkerCalibration : MonoBehaviour
     private KeyCode _keyBoardCalibration = KeyCode.K;
 
     public MarkerTrackProvider TrackProvider;
-    public Transform TagCamera;
+    public Transform MarkerCamera;
     public Transform VRCalibrationPoint;
     public Transform VRCamera;
 
@@ -93,7 +93,7 @@ public class MarkerCalibration : MonoBehaviour
     {
         if (!TrackProvider.IsTracked)
             return;
-        _realRefPointsList.Add(Quaternion.Inverse(TagCamera.rotation) * (TrackProvider.transform.position - TagCamera.position));
+        _realRefPointsList.Add(Quaternion.Inverse(MarkerCamera.rotation) * (TrackProvider.transform.position - MarkerCamera.position));
         _virtualRefPointsList.Add(Quaternion.Inverse(VRCamera.rotation) * (VRCalibrationPoint.position - VRCamera.position));
     }
 }

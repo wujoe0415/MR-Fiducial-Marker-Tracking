@@ -106,13 +106,12 @@ public class CalibrationCenter : MonoBehaviour
     {
         if(Controller == Device.Quest3)
         {
-            _bottomLeft = new Vector3d(-0.05827378d, 0.01135616d, 0.03250179d);
-            _bottomRight = new Vector3d(0.0416619f, 0.01436019f, 0.03450958f);
-            _topLeft = new Vector3d(-0.06084183f, 0.1099169f, 0.01590483f);
-            _topRight = new Vector3d(0.03905331f, 0.1129324f, 0.01788497f);
+            _bottomLeft = new Vector3d(0.0160917491d, 0.00959766284d, -0.0928313658d);
+            _bottomRight = new Vector3d(0.109332196d, -0.0212159865d, -0.0739435703d);
+            _topLeft = new Vector3d(0.0160822552d, 0.0618085563d, -0.00755501958d);
+            _topRight = new Vector3d(0.10929998d, 0.0309733469d, 0.0113575244d);
         }
         transform.localPosition = ((_bottomLeft + _bottomRight + _topLeft + _topRight) / 4.0d).ToVector();
-        
     }
 
 }

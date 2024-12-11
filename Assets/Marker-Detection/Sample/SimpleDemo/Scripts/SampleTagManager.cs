@@ -11,7 +11,7 @@ public class SampleTagManager : MonoBehaviour
     private void Start()
     {
         GameObject calib = new GameObject("RT");
-        if (GameObject.Find("OVRCameraRig") == null)
+        if (FindObjectOfType<OVRCameraRig>() == null)
         {
 #if UNITY_EDITOR
             Debug.LogError("Can't find OVR Camera Rig!");

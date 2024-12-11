@@ -74,7 +74,7 @@ public class ArucoDetectionProvider : MonoBehaviour, IDetectionProvider
             _trackers.Add(new Dictionary<int, MarkerTrackProvider>());
 
         GameObject calib = new GameObject("RT");
-        if (GameObject.Find("OVRCameraRig") == null)
+        if (FindObjectOfType<OVRCameraRig>() == null)
         {
 #if UNITY_EDITOR
             Debug.LogError("Can't find OVR Camera Rig!");

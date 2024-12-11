@@ -23,7 +23,7 @@ public class MarkerPredictionReciver : MonoBehaviour
     private Thread _connection;
     private Socket _server;
 
-    byte[] _hmdBuffer = new byte[80];
+    byte[] _hmdBuffer = new byte[88];
     private Transform _hmdTransform;
 
     public void AddTagRecieve(Action<double[]> action)
@@ -148,7 +148,7 @@ public class MarkerPredictionReciver : MonoBehaviour
             int offset = 0;
 
             // Pack the message length (80 bytes for 10 doubles)
-            BitConverter.GetBytes((long)80).CopyTo(_hmdBuffer, offset);
+            BitConverter.GetBytes((long)88).CopyTo(_hmdBuffer, offset);
             offset += 8;
 
             // Pack timestamp
