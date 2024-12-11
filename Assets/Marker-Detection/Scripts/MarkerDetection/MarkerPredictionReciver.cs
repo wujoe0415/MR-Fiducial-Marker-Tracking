@@ -68,7 +68,7 @@ public class MarkerPredictionReciver : MonoBehaviour
 
             _onTagRecieve?.Invoke(markers);
         }
-        Debug.Log(OVRNodeStateProperties.IsHmdPresent());
+        //Debug.Log(OVRNodeStateProperties.IsHmdPresent());
         if (OVRNodeStateProperties.IsHmdPresent() && _server != null && _server.Connected)
         {
             SendHMDData();
