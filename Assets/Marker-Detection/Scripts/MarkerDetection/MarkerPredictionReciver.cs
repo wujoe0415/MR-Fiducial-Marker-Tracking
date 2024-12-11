@@ -7,6 +7,8 @@ using System.Net.Sockets;
 using System.Threading;
 using UnityEngine;
 
+using Unity.XR.Oculus;
+
 [RequireComponent(typeof(AnacondaStarter))]
 public class MarkerPredictionReciver : MonoBehaviour
 {
@@ -17,8 +19,13 @@ public class MarkerPredictionReciver : MonoBehaviour
         new ConcurrentQueue<string>();
     private ConcurrentQueue<double[]> _predictMarkers = 
         new ConcurrentQueue<double[]>();
+
     private Thread _connection;
-    
+    private Socket _server;
+
+    byte[] _hmdBuffer = new byte[80];
+    private Transform _hmdTransform;
+
     public void AddTagRecieve(Action<double[]> action)
     {
         _onTagRecieve += action;
@@ -42,6 +49,8 @@ public class MarkerPredictionReciver : MonoBehaviour
     }
     private void Start()
     {
+        _hmdTransform = Camera.main.transform;
+
         var loopbackAddress = Socket.OSSupportsIPv6 ? 
             IPAddress.Parse("::1") :
             IPAddress.Loopback;
@@ -59,6 +68,11 @@ public class MarkerPredictionReciver : MonoBehaviour
 
             _onTagRecieve?.Invoke(markers);
         }
+        Debug.Log(OVRNodeStateProperties.IsHmdPresent());
+        if (OVRNodeStateProperties.IsHmdPresent() && _server != null && _server.Connected)
+        {
+            SendHMDData();
+        }
     }
 
     private void CreateConnection(object port)
@@ -72,7 +86,6 @@ public class MarkerPredictionReciver : MonoBehaviour
 
         try
         {
-            Socket server;
             int socketByteCount;
             byte[] msg = new byte[65535];
             
@@ -89,7 +102,7 @@ public class MarkerPredictionReciver : MonoBehaviour
 
                 if (listener.Pending())
                 {
-                    server = listener.AcceptSocket();
+                    _server = listener.AcceptSocket();
                     break;
                 }
             }
@@ -102,15 +115,12 @@ public class MarkerPredictionReciver : MonoBehaviour
                     break;
                 }
 
-                socketByteCount = server.Receive(msg, SocketFlags.None);
-
+                // Receive the response from the server
+                socketByteCount = _server.Receive(msg, SocketFlags.None);
                 if (socketByteCount <= 8)
-                {
                     continue;
-                }
-
+                
                 var markers = new double[socketByteCount/8];
-
                 Buffer.BlockCopy(msg, 0, markers, 0, socketByteCount);
                 _predictMarkers.Enqueue(markers);
             }
@@ -131,6 +141,56 @@ public class MarkerPredictionReciver : MonoBehaviour
         }
     }
 
+    private void SendHMDData()
+    {
+        try
+        {
+            int offset = 0;
+
+            // Pack the message length (80 bytes for 10 doubles)
+            BitConverter.GetBytes((long)80).CopyTo(_hmdBuffer, offset);
+            offset += 8;
+
+            // Pack timestamp
+            BitConverter.GetBytes((double)Time.timeAsDouble).CopyTo(_hmdBuffer, offset);
+            offset += 8;
+
+            // Pack position
+            Vector3 position = _hmdTransform.position;
+            BitConverter.GetBytes((double)position.x).CopyTo(_hmdBuffer, offset);
+            offset += 8;
+            BitConverter.GetBytes((double)position.y).CopyTo(_hmdBuffer, offset);
+            offset += 8;
+            BitConverter.GetBytes((double)position.z).CopyTo(_hmdBuffer, offset);
+            offset += 8;
+
+            // Pack velocity
+            Vector3 velocity = Vector3.zero;
+            OVRNodeStateProperties.GetNodeStatePropertyVector3(UnityEngine.XR.XRNode.Head, NodeStatePropertyType.Velocity, OVRPlugin.Node.EyeCenter, OVRPlugin.Step.Render, out velocity);
+            BitConverter.GetBytes((double)velocity.x).CopyTo(_hmdBuffer, offset);
+            offset += 8;
+            BitConverter.GetBytes((double)velocity.y).CopyTo(_hmdBuffer, offset);
+            offset += 8;
+            BitConverter.GetBytes((double)velocity.z).CopyTo(_hmdBuffer, offset);
+            offset += 8;
+
+            // Pack angular velocity
+            Vector3 angularVelocity = Vector3.zero;
+            OVRNodeStateProperties.GetNodeStatePropertyVector3(UnityEngine.XR.XRNode.Head, NodeStatePropertyType.AngularVelocity, OVRPlugin.Node.EyeCenter, OVRPlugin.Step.Render, out angularVelocity);
+            BitConverter.GetBytes((double)angularVelocity.x).CopyTo(_hmdBuffer, offset);
+            offset += 8;
+            BitConverter.GetBytes((double)angularVelocity.y).CopyTo(_hmdBuffer, offset);
+            offset += 8;
+            BitConverter.GetBytes((double)angularVelocity.z).CopyTo(_hmdBuffer, offset);
+
+            // Send the data
+            _server.Send(_hmdBuffer, SocketFlags.None);
+        }
+        catch (SocketException e)
+        {
+            Debug.LogError($"Failed to send HMD data: {e.Message}");
+        }
+    }
     private void OnDisable()
     {
         _terminateConnectionSignal.Enqueue("Stop");

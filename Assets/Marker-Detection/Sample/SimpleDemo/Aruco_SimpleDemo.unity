@@ -613,7 +613,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 891c0be7fa732e74ea9f2c44111a36ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AnacondaEnvironment: IDVR23
+  AnacondaEnvironment: aruco_detection
 --- !u!1 &2001088171
 GameObject:
   m_ObjectHideFlags: 0

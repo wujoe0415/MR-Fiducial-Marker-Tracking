@@ -7,6 +7,9 @@ import numpy as np
 import os
 import socket
 from _aruco_detecter import ArucoDetecter
+from _enhanced_detecter import EnhancedArucoDetecter
+from _extended_aruco_detecter import EnhancedArucoDetecterNonLinear
+from _motion_aware_aruco_detecter import HMDMotionAwareArucoDetecter
 from _camera_helper import *
 
 POLL_TIME = 0.00001
@@ -29,7 +32,8 @@ def aruco_detect(
         result_conn, 
         end_signal):
     continue_flag = True
-    aruco_detecter = ArucoDetecter(
+    # change aruco detecter
+    aruco_detecter = HMDMotionAwareArucoDetecter(
         mtx,
         dist,
         marker_size,
@@ -55,7 +59,7 @@ def multi_size_aruco_detect(settings, result_conn, end_signal):
     result_conns = []
     sub_process_end_signal = Value(c_bool, False)
 
-    def detect_result_visualize(frame, center_pos):
+    def detect_result_visualize(frame, center_pos, marker_size):
         center_object_point = np.array([0, 0, 0], dtype=np.double)
         img_points, jacobian = cv2.projectPoints(
             center_object_point,
@@ -67,10 +71,10 @@ def multi_size_aruco_detect(settings, result_conn, end_signal):
         distance_to_center = np.linalg.norm(center_pos)
         cv2.putText(
             frame,
-            ' Distance: ~%scm'%(int(distance_to_center * 100)),
+            ' D: ~%scm'%(int(distance_to_center * 100)),
             center_coord,
             cv2.FONT_HERSHEY_SIMPLEX,
-            1,
+            marker_size*15,
             (255, 255, 255),
             1,
             cv2.LINE_AA)
@@ -107,12 +111,17 @@ def multi_size_aruco_detect(settings, result_conn, end_signal):
 
         if end_signal.value:
             sub_process_end_signal.value = True
-
             for i in range(setting_counts):
                 aruco_detecter_processes[i].join()
-            
             break
         
+        ret, data = poll_recv(result_conn)
+        if ret and isinstance(data, tuple) and data[0] == 'hmd_data':
+            hmd_motion = data[1]
+            for i in range(setting_counts):
+                frame_conns[i].send(('hmd_motion', hmd_motion))
+            continue
+
         ret, frame = cap.read()
         frame = nullable_flip(frame, flip_code)
         results = []
@@ -132,7 +141,7 @@ def multi_size_aruco_detect(settings, result_conn, end_signal):
             for detected_result in detected_results:
                 prediction_content, r_vec, t_vec = detected_result
                 results.extend([i] + prediction_content)
-                frame = detect_result_visualize(frame, prediction_content[1:4])
+                frame = detect_result_visualize(frame, prediction_content[1:4], marker_size)
 
         cv2.imshow('Frame', frame)
         keycode = cv2.waitKey(1)
@@ -174,6 +183,7 @@ def data_sending_server(port, result_conn, end_signal):
 
         try:
             socket_connection.connect((ip_address, port))
+            socket_connection.setblocking(False)
         except OSError:
             return (False, None)
 
@@ -193,23 +203,52 @@ def data_sending_server(port, result_conn, end_signal):
         end_signal.value = True
         return
     
+    recv_buffer = 'b'
+    HEADER_SIZE = 8
+
     while not end_signal.value:
         ret, message = poll_recv(result_conn)
 
-        if not ret:
-            continue
+        # send data
+        if ret:
+            try:
+                socket_connection.sendall(message.tobytes())
+            except (ConnectionResetError, ConnectionAbortedError):
+                print('Connection reset.')
+                end_signal.value = True
+                poll_recv(result_conn) # TODO: Check if this is necessary
+                break
         
         try:
-            socket_connection.sendall(message.tobytes())
-        except ConnectionResetError:
-            print('Connection reset.')
+            recv_buffer = socket_connection.recv(4096)
+            if chunk:
+                recv_buffer += chunk
+                
+                # Process complete messages
+                while len(recv_buffer) >= HEADER_SIZE:
+                    # Extract message length
+                    msg_len = struct.unpack('!Q', recv_buffer[:HEADER_SIZE])[0]
+                    
+                    # Check if we have a complete message
+                    if len(recv_buffer) >= HEADER_SIZE + msg_len:
+                        # Extract message
+                        msg_data = recv_buffer[HEADER_SIZE:HEADER_SIZE + msg_len]
+                        recv_buffer = recv_buffer[HEADER_SIZE + msg_len:]
+                        
+                        # Parse HMD data
+                        hmd_data = np.frombuffer(msg_data, dtype=np.float64)
+                        # Format: [timestamp, pos_x, pos_y, pos_z, vel_x, vel_y, vel_z, ang_vel_x, ang_vel_y, ang_vel_z]
+                        
+                        # Store HMD data in shared memory or send through pipe
+                        result_conn.send(('hmd_data', hmd_data))
+                    else:
+                        break
+        except BlockingIOError:
+            # No data available to receive
+            pass
+        except (ConnectionResetError, ConnectionAbortedError):
+            print('Connection lost.')
             end_signal.value = True
-            poll_recv(result_conn)
-            break
-        except ConnectionAbortedError:
-            print('Connection aborted.')
-            end_signal.value = True
-            poll_recv(result_conn)
             break
     
     end_signal.value = True

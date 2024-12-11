@@ -10,19 +10,19 @@
 + Meta XR SDK
 ## Setup
 
-Before using this plugin, you are required to set up a Python environment and 3D model to help your attached camera self-calibrated.
+Before using this plugin, you are required to set up a Python environment and 3D model to help your attached camera self-calibrate.
 
 In our settings, we support the following ArUco markers.
 The size of 0.056 cm `DICT_6X6_250`, and the size of 0.027 cm DICT_4X4_250. Please make sure your markers is identical to this specification.
 
-In our model, we use a NexiGo N980P 60fps Webcam for the demo, so we made the camera flip 180 degrees horizontally to fit the model. If you want to develop with your own device, please modify the information in [setting.json](https://github.com/wujoe0415/MR-Fiducial-Marker-Tracking/blob/main/Assets/Resources/aruco_detection/setting.json), especially the `flip_code` property.
+In our model, we use a NexiGo N980P 60fps Webcam for the demo, so we made the camera flip 180 degrees horizontally to fit the model. If you want to develop with your device, please modify the information in [setting.json](https://github.com/wujoe0415/MR-Fiducial-Marker-Tracking/blob/main/Assets/Resources/aruco_detection/setting.json), especially the `flip_code` property.
 
 ### 3D Model
 
 We design [3D model](https://github.com/wujoe0415/MR-Fiducial-Marker-Tracking/tree/main/3D%20Models) and calculate their corresponding coordination as calibration points. 
 
-1. Please refer to 3D model to get the file.
-2. Set up Hmd and controller external models.
+1. Please refer to the 3D model to get the file.
+2. Set up hmd and controller external models.
 3. Attach 4x4 marker id = 0 ArUco on the controller plane.
 
 ### Camera Calibration
@@ -43,7 +43,7 @@ For example, we are using [NexiGo N980P 60fps Webcam](https://www.hellodirect.co
 
    `conda env create -f AnacondaEnvironment.yaml`
 
-2. Rename the environment with `IDVR23`.
+2. Rename the environment with `aruco_detection`.
 
 3. If there are more cameras connected to your computer, you need to change the number of `"camera"{"port":0}` parameter in [`setting.json`](https://github.com/wujoe0415/MR-Fiducial-Marker-Tracking/blob/main/Assets/Resources/aruco_detection/setting.json).
 

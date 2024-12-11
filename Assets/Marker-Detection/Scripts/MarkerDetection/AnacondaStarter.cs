@@ -10,7 +10,7 @@ public class AnacondaStarter : MonoBehaviour
 {
     private Process _pythonProcess;
     [Tooltip("Register the target environment name in Anaconda")]
-    private string AnacondaEnvironment = "aruco_detection";
+    public string AnacondaEnvironment = "aruco_detection";
     private string _arucoDetecterPath = "";
     private string _anacondaPath = ""; // Default path is "C:\Users\<user>\anaconda3\Scripts\activate.bat"
 
