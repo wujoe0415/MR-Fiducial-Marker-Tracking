@@ -7,6 +7,8 @@ using MathNet.Numerics.LinearAlgebra.Double;
 
 public class ApplyCalibration : MonoBehaviour
 {
+    public static string FilePath = "Assets/Marker-Detection/ArUco/matrix.json";
+    
     private void Awake()
     {
         DenseMatrix rt = LoadMatrix();
@@ -20,7 +22,7 @@ public class ApplyCalibration : MonoBehaviour
     }
     private DenseMatrix LoadMatrix()
     {
-        string filePath = "Assets/Marker-Detection/matrix.json";
+        string filePath = FilePath;
         if (File.Exists(filePath))
         {
             string json = File.ReadAllText(filePath);
@@ -31,6 +33,7 @@ public class ApplyCalibration : MonoBehaviour
         else
         {
             Debug.LogError("File not found: " + filePath);
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath));
             return null;
         }
     }

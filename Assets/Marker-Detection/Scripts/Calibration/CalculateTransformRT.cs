@@ -71,7 +71,7 @@ public class CalculateTransformRT : MonoBehaviour
         SerializableDenseMatrix serializableRt = new SerializableDenseMatrix(rt);
 
         string json = JsonUtility.ToJson(serializableRt);
-        string filePath = "Assets/ArUco/matrix.json";
+        string filePath = ApplyCalibration.FilePath;
 
         if (!File.Exists(filePath))
         {
