@@ -127,10 +127,10 @@ public class CalibrationCenter : MonoBehaviour
         {
             return new DeviceOffset
             {
-                BottomLeft = new Vector3d(-0.0717757f, 0.1340075f, 0.04525972f),
-                BottomRight = new Vector3d(0.02517137f, 0.1323007f, 0.06983702f),
-                TopLeft = new Vector3d(-0.05478766f, 0.06652871f, -0.02652233f),
-                TopRight = new Vector3d(0.04214989f, 0.06478038f, -0.002005272f)
+                BottomLeft = new Vector3d(-0.0717757d, 0.1340075d, 0.04525972d),
+                BottomRight = new Vector3d(0.02517137f, 0.1323007f, 0.06983702d),
+                TopLeft = new Vector3d(-0.05478766d, 0.06652871d, -0.02652233d),
+                TopRight = new Vector3d(0.04214989d, 0.06478038d, -0.002005272d)
             };
         }
         else if (hmd == Device.Quest3)

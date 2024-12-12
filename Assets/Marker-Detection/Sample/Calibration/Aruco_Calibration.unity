@@ -1964,7 +1964,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48f653dee77f9274b8a5b28cc6a92f80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Controller: 1
+  HMD: 1
 --- !u!1 &1257799828
 GameObject:
   m_ObjectHideFlags: 0
@@ -2363,7 +2363,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 8135366055003731584, guid: af8d87acee795ed4192fa36233eec7d9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a0127d9d77bb8fb4fb7d2245e2081740, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2670,7 +2670,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SamplePointNumber: 800
   TrackProvider: {fileID: 954757249}
-  MarkerCamera: {fileID: 0}
+  MarkerCamera: {fileID: 1310265643}
   VRCalibrationPoint: {fileID: 1227929765}
   VRCamera: {fileID: 395870649}
   Msg: {fileID: 1082977024}
