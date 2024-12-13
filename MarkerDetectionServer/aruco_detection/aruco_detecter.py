@@ -11,6 +11,7 @@ from _enhanced_detecter import EnhancedArucoDetecter
 from _extended_aruco_detecter import EnhancedArucoDetecterNonLinear
 from _motion_aware_aruco_detecter import HMDMotionAwareArucoDetecter
 from _camera_helper import *
+import struct
 
 POLL_TIME = 0.00001
 
@@ -220,7 +221,7 @@ def data_sending_server(port, result_conn, end_signal):
                 break
         
         try:
-            recv_buffer = socket_connection.recv(4096)
+            chunk = socket_connection.recv(4096)
             if chunk:
                 recv_buffer += chunk
                 
@@ -297,7 +298,6 @@ def main():
     aruco_detect_process.join()
     data_transmission_process.join()
     print('Detecter close.')
-
 
 if __name__ == '__main__':
     main()
